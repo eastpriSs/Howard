@@ -5,6 +5,8 @@
 #include <QGraphicsScene>
 #include <QListWidgetItem>
 
+#include "PropertyList.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -16,6 +18,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    void test();
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
@@ -25,5 +28,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QGraphicsScene scene;
+    PropertyList propertyList;
 };
 #endif // MAINWINDOW_H

@@ -2,6 +2,8 @@
 #include "ui_MainWindow.h"
 #include "ToolListHandler.h"
 
+void MainWindow::test(){ qDebug() << 1; }
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -14,7 +16,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->graphicsView->setSceneRect(QRect(0,0,300,600));
 
     ui->toolList->addItems({"Спрайт",
-                            "Текст"});
+                            "Текст",
+                            "Фон"});
+
+    ui->propertyLayout->addLayout(&propertyList);
+
+    QObject::connect(&scene, &QGraphicsScene::changed,
+                     &propertyList, [&](){ propertyList.update(scene.selectedItems()); });
 }
 
 MainWindow::~MainWindow()

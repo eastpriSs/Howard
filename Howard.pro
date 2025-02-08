@@ -9,18 +9,25 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    PropertyList.cpp \
+    PropertyListItem.cpp \
     Sprite.cpp \
+    TextEnterDialog.cpp \
     ToolListHandler.cpp \
     main.cpp \
     MainWindow.cpp
 
 HEADERS += \
     MainWindow.h \
+    PropertyList.h \
+    PropertyListItem.h \
     Sprite.h \
+    TextEnterDialog.h \
     ToolListHandler.h
 
 FORMS += \
-    MainWindow.ui
+    MainWindow.ui \
+    TextEnterDialog.ui
 
 TRANSLATIONS += \
     Howard_ru_RU.ts

@@ -21,6 +21,11 @@ public:
    void handle(QGraphicsScene&) override;
 };
 
+class BackGroundHandler : public ToolHandler {
+public:
+    void handle(QGraphicsScene&) override;
+};
+
 class ToolListHandler
 {
 public:
