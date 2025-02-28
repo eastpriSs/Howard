@@ -8,7 +8,7 @@ class PropertyListItem : public QHBoxLayout
 {
 public:
     PropertyListItem(QLabel*, QWidget*);
-    void setChildrensEnabled(bool);
+    void hide(bool);
 private:
     QLabel* nameL;
     QWidget* valueWidget;

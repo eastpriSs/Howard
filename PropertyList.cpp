@@ -1,49 +1,74 @@
 #include "PropertyList.h"
-#include <QPushButton>
-#include <QLineEdit>
+#include <QBitArray>
+#include <QDoubleValidator>
 
 PropertyList::PropertyList()
-    : allProperties(3, true), textProperties(3, true), pixmapProperties(3, true)
+    : propertyMapping({
+       text,
+       rotation,
+    })
 {
+    initPropertiesInputForms();
+
     list = {
-        new PropertyListItem(new QLabel("Текст:"),  new QLineEdit()),
-        new PropertyListItem(new QLabel("Путь:"),   new QLineEdit()),
-        new PropertyListItem(new QLabel("Скрыть:"), new QPushButton())
+        new PropertyListItem(new QLabel("Текст:"),  textInputForm),
+        new PropertyListItem(new QLabel("Угол поворота:"), rotationInputForm)
     };
 
-    addLayout(list[0]);
-    addLayout(list[1]);
-    addLayout(list[2]);
-
-    textProperties[1] = false;
-    pixmapProperties[0] = false;
+    foreach (PropertyListItem* i, list)
+        addLayout(i);
 }
 
+PropertyList::Properties getProperties(QGraphicsItem* item)
+{
+    PropertyList::Properties res;
 
+    if (qgraphicsitem_cast<QGraphicsPixmapItem*>(item)) {
+        res |= PropertyList::Property::rotation;
+    } else if (qgraphicsitem_cast<QGraphicsTextItem*>(item)) {
+        res |= PropertyList::Property::text
+            | PropertyList::Property::rotation;
+    }
+
+    return res;
+}
 
 void PropertyList::update(const QList<QGraphicsItem*>& selectedItems)
 {
+    selected = selectedItems;
+
     if (selectedItems.isEmpty())
         return;
 
-    QBitArray generalProperties(allProperties);
+    Properties generalProp = allProps;
     foreach (QGraphicsItem* item, selectedItems) {
-        if (qgraphicsitem_cast<QGraphicsPixmapItem*>(item))
-            generalProperties &= pixmapProperties;
-        else if (qgraphicsitem_cast<QGraphicsTextItem*>(item))
-            generalProperties &= textProperties;
+        generalProp &= getProperties(item);
+        if (generalProp == 0) break;
     }
-
-    for (int i = 0; i < generalProperties.size(); ++i) {
-        list[i]->setChildrensEnabled(generalProperties.at(i));
-    }
-
-    selected = selectedItems;
+    for (int i = 0; i < propertyMapping.size(); ++i)
+        list[i]->hide(generalProp & propertyMapping[i]);
 }
 
-void PropertyList::test()
+void PropertyList::setTextSelectedFromInputForm()
 {
-    foreach (QGraphicsItem* item, selected) {
-        item->setVisible(false);
-    }
+    foreach (QGraphicsItem* item, selected)
+        qgraphicsitem_cast<QGraphicsTextItem*>(item)->setPlainText(textInputForm->text());
+}
+
+void PropertyList::setRotationSelectedFromInputForm()
+{
+    foreach (QGraphicsItem* item, selected)
+        item->setRotation(rotationInputForm->text().toDouble());
+}
+
+
+void PropertyList::initPropertiesInputForms()
+{
+    textInputForm = new QLineEdit();
+
+    rotationInputForm = new QLineEdit();
+    rotationInputForm->setValidator(new QDoubleValidator(0.0, 5.0, 2));
+
+    QObject::connect(textInputForm, &QLineEdit::textChanged, this, &PropertyList::setTextSelectedFromInputForm);
+    QObject::connect(rotationInputForm, &QLineEdit::textChanged, this, &PropertyList::setRotationSelectedFromInputForm);
 }

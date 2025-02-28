@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->propertyLayout->addLayout(&propertyList);
 
-    QObject::connect(&scene, &QGraphicsScene::changed,
+    QObject::connect(&scene, &QGraphicsScene::selectionChanged,
                      &propertyList, [&](){ propertyList.update(scene.selectedItems()); });
 }
 

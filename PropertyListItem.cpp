@@ -7,8 +7,13 @@ PropertyListItem::PropertyListItem(QLabel* name, QWidget* value)
     addWidget(value);
 }
 
-void PropertyListItem::setChildrensEnabled(bool f)
+void PropertyListItem::hide(bool f)
 {
-    nameL->setEnabled(f);
-    valueWidget->setEnabled(f);
+    if (!f){
+        nameL->hide();
+        valueWidget->hide();
+    } else {
+        nameL->show();
+        valueWidget->show();
+    }
 }
