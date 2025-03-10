@@ -1,5 +1,4 @@
 #include "PropertyList.h"
-#include <QBitArray>
 #include <QDoubleValidator>
 
 PropertyList::PropertyList()

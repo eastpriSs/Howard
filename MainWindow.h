@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QListWidgetItem>
+#include <QHash>
+
 
 #include "PropertyList.h"
 
@@ -25,9 +27,14 @@ public:
 private slots:
     void on_toolList_itemDoubleClicked(QListWidgetItem *item);
 
+    void on_addSceneBtn_clicked();
+
+    void on_sceneList_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+
 private:
     Ui::MainWindow *ui;
-    QGraphicsScene scene;
     PropertyList propertyList;
+    QHash<QString, QGraphicsScene*> sceneMap;
+    QGraphicsScene* currentScene;
 };
 #endif // MAINWINDOW_H
